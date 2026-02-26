@@ -100,6 +100,13 @@
             text-align: left;
             color: #ffaa9b;
         }
+        
+        /* Ad Container for A-Ads/Adsterra Banner */
+        .ad-slot {
+            margin-top: 20px;
+            min-height: 90px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -114,18 +121,26 @@
             <div class="warning-text">
                 <strong>CRITICAL NOTICE:</strong> Browsing without an active AdBlocker exposes hardware to high-intensity scripts. Secure your device before proceeding.
             </div>
-            <a href="https://chromewebstore.google.com/detail/adblock-%E2%80%94-block-ads-acros/gighmmpiobklfepjocnamgkkbiglidom" target="_blank" class="btn-main">Install Protection</a>
+            
+            <a href="https://chromewebstore.google.com/detail/adblock-%E2%80%94-block-ads-acros/gighmmpiobklepjocnamgkkbiglidom" target="_blank" class="btn-main" id="protection-link">Install Protection</a>
+            
             <br><br>
             <button id="continue-btn" style="background:none; border:none; color:#444; cursor:pointer; font-size: 13px; text-decoration: underline;">Skip once secured</button>
+
+            <div class="ad-slot">
+                </div>
         </div>
     </div>
 
     <script>
+        // Change this only when you move your hub to GitHub too
         const targetUrl = "https://sites.google.com/view/classroom-center-67/home?authuser=1&read_current=1";
+        
         const welcome = document.getElementById('welcome-overlay');
         const checkScreen = document.getElementById('extension-check');
+        const continueBtn = document.getElementById('continue-btn');
 
-        // Animation flow
+        // Animation flow (No auto-redirect here)
         window.addEventListener('load', () => {
             setTimeout(() => {
                 welcome.style.opacity = '0';
@@ -137,17 +152,25 @@
             }, 2500);
         });
 
-        // The Fix: Use window.location.replace to bypass iframe restrictions
-        document.getElementById('continue-btn').addEventListener('click', () => {
-            window.location.replace(targetUrl);
+        // The Revenue Delay Fix
+        continueBtn.addEventListener('click', () => {
+            // Change button appearance to keep them on the page for 3 more seconds
+            continueBtn.innerText = "Verifying Security...";
+            continueBtn.style.color = "#ff4b2b";
+            
+            // Wait 3 seconds then redirect
+            setTimeout(() => {
+                window.location.replace(targetUrl);
+            }, 3000); 
         });
 
-        // Shortcuts (Only active before the redirect)
+        // Shortcuts
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' || (e.shiftKey && e.code === 'KeyL')) {
                 window.location.replace("https://mail.google.com");
             }
         });
     </script>
-</body>
+
+    </body>
 </html>
