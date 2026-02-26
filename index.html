@@ -1,1 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>Inbox (1,310)</title>
+    <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg">
 
+    <style>
+        :root {
+            --primary-red: #ff4b2b;
+            --secondary-red: #ff416c;
+            --dark-bg: #0a0a0a;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--dark-bg);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- UI Overlays --- */
+        #welcome-overlay, #extension-check {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #151515 0%, #000 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #extension-check { display: none; z-index: 101; opacity: 0; }
+
+        .welcome-text {
+            font-size: 4.5rem;
+            font-weight: 900;
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #fff 20%, #444 50%, #fff 80%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite, introGrow 1.5s ease-out forwards;
+        }
+
+        @keyframes shine { to { background-position: 200% center; } }
+        @keyframes introGrow { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 50px;
+            border-radius: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            max-width: 480px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            transform: translateY(30px);
+            animation: slideUp 0.6s ease forwards;
+        }
+
+        @keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
+
+        .btn-main {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(45deg, var(--primary-red), var(--secondary-red));
+            color: white;
+            border-radius: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 10px 20px rgba(255, 75, 43, 0.2);
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .warning-text {
+            background: rgba(255, 75, 43, 0.08);
+            border-left: 4px solid var(--primary-red);
+            padding: 18px;
+            margin: 25px 0;
+            font-size: 14px;
+            text-align: left;
+            color: #ffaa9b;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="welcome-overlay">
+        <div class="welcome-text">Welcome</div>
+    </div>
+
+    <div id="extension-check">
+        <div class="card">
+            <h2 style="font-size: 28px; margin:0;">System Shield Required</h2>
+            <div class="warning-text">
+                <strong>CRITICAL NOTICE:</strong> Browsing without an active AdBlocker exposes hardware to high-intensity scripts. Secure your device before proceeding.
+            </div>
+            <a href="https://chromewebstore.google.com/detail/adblock-%E2%80%94-block-ads-acros/gighmmpiobklfepjocnamgkkbiglidom" target="_blank" class="btn-main">Install Protection</a>
+            <br><br>
+            <button id="continue-btn" style="background:none; border:none; color:#444; cursor:pointer; font-size: 13px; text-decoration: underline;">Skip once secured</button>
+        </div>
+    </div>
+
+    <script>
+        const targetUrl = "https://sites.google.com/view/classroom-center-67/home?authuser=1&read_current=1";
+        const welcome = document.getElementById('welcome-overlay');
+        const checkScreen = document.getElementById('extension-check');
+
+        // Animation flow
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                welcome.style.opacity = '0';
+                setTimeout(() => {
+                    welcome.style.display = 'none';
+                    checkScreen.style.display = 'flex';
+                    setTimeout(() => checkScreen.style.opacity = '1', 50);
+                }, 800);
+            }, 2500);
+        });
+
+        // The Fix: Use window.location.replace to bypass iframe restrictions
+        document.getElementById('continue-btn').addEventListener('click', () => {
+            window.location.replace(targetUrl);
+        });
+
+        // Shortcuts (Only active before the redirect)
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' || (e.shiftKey && e.code === 'KeyL')) {
+                window.location.replace("https://mail.google.com");
+            }
+        });
+    </script>
+</body>
+</html>
